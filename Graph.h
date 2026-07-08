@@ -30,7 +30,9 @@ public:
     rows(rows), cols(cols), grid(rows, std::vector<Cell>(cols)){} //Grid populated with default cells
 
     void generate();
-    void print() const;
+    void print() const;//Useful for debugging
+
+    Position startPos, endPos;
 };
 
 
