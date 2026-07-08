@@ -53,11 +53,11 @@ void Maze::generate() {
             grid[pickedNeighborPos.row][pickedNeighborPos.col].visited = true;
 
             //Find wall to remove between current node & neighbor node
-            if (pickedNeighborPos.row > currentPos.row) {//If upper neighbor was picked
+            if (pickedNeighborPos.row < currentPos.row) {//If upper neighbor was picked
                 grid[pickedNeighborPos.row][pickedNeighborPos.col].down = true;
                 grid[currentPos.row][currentPos.col].up = true;
             }
-            else if (pickedNeighborPos.row < currentPos.row) {//If lower neighbor was picked
+            else if (pickedNeighborPos.row > currentPos.row) {//If lower neighbor was picked
                 grid[pickedNeighborPos.row][pickedNeighborPos.col].up = true;
                 grid[currentPos.row][currentPos.col].down = true;
             }
