@@ -1,5 +1,3 @@
-//Ensure walls are not destroyed on edges of maze
-//Create start and end nodes at only at the edge of maze randomly
 #include "Graph.h"
 
 
@@ -75,19 +73,60 @@ void Maze::generate() {
             visitedStack.pop();
         }
     }
+    //Assign startPos & endPos
+    std::bernoulli_distribution vertOrHorizStart(0.5);
+    const bool vertStart = vertOrHorizStart(gen);
 
+    if (vertStart) {
 
+        std::bernoulli_distribution leftOrRightStart(0.5);
+        const bool leftStart = leftOrRightStart(gen);
+
+        if (leftStart) {
+            startPos.col = 0;
+            endPos.col = cols - 1;
+        }
+        else {
+            startPos.col = cols - 1;
+            endPos.col = 0;
+        }
+
+        std::uniform_int_distribution rowStartRange(0, rows - 1);
+        startPos.row = rowStartRange(gen);
+        std::uniform_int_distribution rowEndRange(0, rows - 1);
+        endPos.row = rowEndRange(gen);
+    }
+    else {
+
+        std::bernoulli_distribution topOrBottomStart(0.5);
+        const bool topStart = topOrBottomStart(gen);
+
+        if (topStart) {
+            startPos.row = 0;
+            endPos.row = rows - 1;
+        }
+        else {
+            startPos.row = rows - 1;
+            endPos.row = 0;
+        }
+
+        std::uniform_int_distribution colStartRange(0, cols - 1);
+        startPos.col = colStartRange(gen);
+        std::uniform_int_distribution rowEndRange(0, cols - 1);
+        endPos.col = rowEndRange(gen);
+    }
+    //Start point is 100% random, and end point will always be on the opposite edge, but besides that, is random too
 };
 
 void Maze::print() const {
-    // Top border
     for (int c = 0; c < cols; ++c) std::cout << "+--";
     std::cout << "+\n";
+
 
     for (int r = 0; r < rows; ++r) {
         std::cout << "|";
         for (int c = 0; c < cols; ++c) {
-            std::cout << "  "; // cell interior (could mark start/end here)
+            std::cout << "  ";
             std::cout << (grid[r][c].right ? " " : "|");
         }
         std::cout << "\n";
@@ -98,4 +137,9 @@ void Maze::print() const {
         }
         std::cout << "\n";
     }
+
+    std::cout << std::endl;
+    std::cout << "Start --> Row: " << startPos.row << ", Col: " << startPos.col << std::endl;
+    std::cout << "End --> Row: " << endPos.row << ", Col: " << endPos.col << std::endl;
+    std::cout << "(Indexing for Row & Col starts at 0)" << std::endl;
 }
