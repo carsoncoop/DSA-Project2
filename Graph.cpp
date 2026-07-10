@@ -159,7 +159,9 @@ bool Maze::DFS(Position *startPos, Position *endPos, int up, int down, int left,
         return true;
     }
 
-    if (grid(startPos->row, startPos->col)->up) {
+    grid(startPos->row, startPos->col)->visited = true;
+
+    if (grid(startPos->row, startPos->col)->up && !grid(startPos->row + 1, startPos->col)->visited) {
         startPos->row = startPos->row + 1;
         up++;
         bool stop = DFS(startPos, endPos, up, down, left, right);
@@ -169,7 +171,7 @@ bool Maze::DFS(Position *startPos, Position *endPos, int up, int down, int left,
         }
     }
 
-    if (grid(startPos->row, startPos->col)->down) {
+    if (grid(startPos->row, startPos->col)->down && !grid(startPos->row - 1, startPos->col)->visited) {
         startPos->row = startPos->row - 1;
         down++;
         bool stop = DFS(startPos, endPos, up, down, left, right);
@@ -179,7 +181,7 @@ bool Maze::DFS(Position *startPos, Position *endPos, int up, int down, int left,
         }
     }
 
-    if (grid(startPos->row, startPos->col)->left) {
+    if (grid(startPos->row, startPos->col)->left && !grid(startPos->row, startPos->col - 1)->visited) {
         startPos->col = startPos->col - 1;
         left++;
         bool stop = DFS(startPos, endPos, up, down, left, right);
@@ -189,7 +191,7 @@ bool Maze::DFS(Position *startPos, Position *endPos, int up, int down, int left,
         }
     }
 
-    if (grid(startPos->row, startPos->col)->right) {
+    if (grid(startPos->row, startPos->col)->right && !grid(startPos->row, startPos->col + 1)->visited) {
         startPos->col = startPos->col + 1;
         right++;
         bool stop = DFS(startPos, endPos, up, down, left, right);
