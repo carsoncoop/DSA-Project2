@@ -144,13 +144,13 @@ void Maze::print() const {
     std::cout << "(Indexing for Row & Col starts at 0)" << std::endl;
 }
 
-bool Maze::BFS(Position *startPos, Position *endPos, int up, int down, int left, int right) {
+bool Maze::BFS(Position startPo, Position endPo, int up, int down, int left, int right) {
 
 }
 
-bool Maze::DFS(Position *startPos, Position *endPos, int up, int down, int left, int right) {
-    if (startPos->col == endPos->col && startPos->row == endPos->row) {
-        std::cout << "Depth-First Search Direction Results: " << std::endl;
+bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int right) {
+    if (startPo.col == endPo.col && startPo.row == endPo.row) {
+        std::cout << std::endl << "Depth-First Search Direction Results: " << std::endl;
         std::cout << "Up Count: " << up << std::endl;
         std::cout << "Down Count: " << down << std::endl;
         std::cout << "Left Count: " << left << std::endl;
@@ -159,45 +159,50 @@ bool Maze::DFS(Position *startPos, Position *endPos, int up, int down, int left,
         return true;
     }
 
-    grid(startPos->row, startPos->col)->visited = true;
+    grid[startPo.row][startPo.col].visited = true;
 
-    if (grid(startPos->row, startPos->col)->up && !grid(startPos->row + 1, startPos->col)->visited) {
-        startPos->row = startPos->row + 1;
+    if (grid[startPo.row][startPo.col].up && !grid[startPo.row + 1][startPo.col].visited) {
+        startPo.row = startPo.row + 1;
         up++;
-        bool stop = DFS(startPos, endPos, up, down, left, right);
+        bool stop = DFS(startPo, endPo, up, down, left, right);
 
         if (stop) {
             return true;
         }
     }
 
-    if (grid(startPos->row, startPos->col)->down && !grid(startPos->row - 1, startPos->col)->visited) {
-        startPos->row = startPos->row - 1;
+    if (grid[startPo.row][startPo.col].down && !grid[startPo.row - 1][startPo.col].visited) {
+        startPo.row = startPo.row - 1;
         down++;
-        bool stop = DFS(startPos, endPos, up, down, left, right);
+        bool stop = DFS(startPo, endPo, up, down, left, right);
 
         if (stop) {
             return true;
         }
     }
 
-    if (grid(startPos->row, startPos->col)->left && !grid(startPos->row, startPos->col - 1)->visited) {
-        startPos->col = startPos->col - 1;
+    if (grid[startPo.row][startPo.col].left && !grid[startPo.row][startPo.col - 1].visited) {
+        startPo.col = startPo.col - 1;
         left++;
-        bool stop = DFS(startPos, endPos, up, down, left, right);
+        bool stop = DFS(startPo, endPo, up, down, left, right);
 
         if (stop) {
             return true;
         }
     }
 
-    if (grid(startPos->row, startPos->col)->right && !grid(startPos->row, startPos->col + 1)->visited) {
-        startPos->col = startPos->col + 1;
+    if (grid[startPo.row][startPo.col].right && !grid[startPo.row][startPo.col + 1].visited) {
+        startPo.col = startPo.col + 1;
         right++;
-        bool stop = DFS(startPos, endPos, up, down, left, right);
+        bool stop = DFS(startPo, endPo, up, down, left, right);
 
         if (stop) {
             return true;
         }
     }
+}
+
+
+void Maze::runAlgorithms() {
+    DFS(startPos, endPos);
 }

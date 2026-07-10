@@ -35,8 +35,9 @@ public:
 
     Position startPos, endPos;
 
-    bool DFS(Position *startPos, Position *endPos, int up = 0, int down = 0, int left = 0, int right = 0);
-    bool BFS(Position *startPos, Position *endPos, int up = 0, int down = 0, int left = 0, int right = 0);
+    bool DFS(Position startPo, Position endPo, int up = 0, int down = 0, int left = 0, int right = 0);
+    bool BFS(Position startPo, Position endPo, int up = 0, int down = 0, int left = 0, int right = 0);
+    void runAlgorithms();
 };
 
 
