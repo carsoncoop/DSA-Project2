@@ -143,3 +143,59 @@ void Maze::print() const {
     std::cout << "End --> Row: " << endPos.row << ", Col: " << endPos.col << std::endl;
     std::cout << "(Indexing for Row & Col starts at 0)" << std::endl;
 }
+
+bool Maze::BFS(Position *startPos, Position *endPos, int up, int down, int left, int right) {
+
+}
+
+bool Maze::DFS(Position *startPos, Position *endPos, int up, int down, int left, int right) {
+    if (startPos->col == endPos->col && startPos->row == endPos->row) {
+        std::cout << "Depth-First Search Direction Results: " << std::endl;
+        std::cout << "Up Count: " << up << std::endl;
+        std::cout << "Down Count: " << down << std::endl;
+        std::cout << "Left Count: " << left << std::endl;
+        std::cout << "Right Count: " << right << std::endl;
+        std::cout << "Total Count: " << up + down + left + right << std::endl;
+        return true;
+    }
+
+    if (grid(startPos->row, startPos->col)->up) {
+        startPos->row = startPos->row + 1;
+        up++;
+        bool stop = DFS(startPos, endPos, up, down, left, right);
+
+        if (stop) {
+            return true;
+        }
+    }
+
+    if (grid(startPos->row, startPos->col)->down) {
+        startPos->row = startPos->row - 1;
+        down++;
+        bool stop = DFS(startPos, endPos, up, down, left, right);
+
+        if (stop) {
+            return true;
+        }
+    }
+
+    if (grid(startPos->row, startPos->col)->left) {
+        startPos->col = startPos->col - 1;
+        left++;
+        bool stop = DFS(startPos, endPos, up, down, left, right);
+
+        if (stop) {
+            return true;
+        }
+    }
+
+    if (grid(startPos->row, startPos->col)->right) {
+        startPos->col = startPos->col + 1;
+        right++;
+        bool stop = DFS(startPos, endPos, up, down, left, right);
+
+        if (stop) {
+            return true;
+        }
+    }
+}

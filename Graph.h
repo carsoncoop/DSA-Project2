@@ -4,6 +4,7 @@
 #include <random>
 #include <iostream>
 #include <stack>
+#include <string>
 
 
 struct Position {
@@ -33,6 +34,9 @@ public:
     void print() const;//Useful for debugging
 
     Position startPos, endPos;
+
+    bool DFS(Position *startPos, Position *endPos, int up = 0, int down = 0, int left = 0, int right = 0);
+    bool BFS(Position *startPos, Position *endPos, int up = 0, int down = 0, int left = 0, int right = 0);
 };
 
 
