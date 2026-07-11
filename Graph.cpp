@@ -145,7 +145,7 @@ void Maze::print() const {
 }
 
 bool Maze::BFS(Position startPo, Position endPo, int up, int down, int left, int right) {
-
+    return false;
 }
 
 bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int right) {
@@ -200,6 +200,8 @@ bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int
             return true;
         }
     }
+
+    return false;
 }
 
 //https://cplusplus.com/reference/chrono/steady_clock/ referenced for timing information
@@ -209,12 +211,12 @@ void Maze::runAlgorithms() {
     std::chrono::steady_clock::time_point end1 = std::chrono::steady_clock::now();
 
     std::chrono::duration<double> DFS_time = std::chrono::duration_cast<std::chrono::duration<double>>(end1 - start1);
-    std::cout << "DFS took " << DFS_time.count() << " seconds!" << std::endl;
+    std::cout << "DFS took " << 1000 * 1000 * DFS_time.count() << " microseconds!" << std::endl;
 
     std::chrono::steady_clock::time_point start2 = std::chrono::steady_clock::now();
     BFS(startPos, endPos);
     std::chrono::steady_clock::time_point end2 = std::chrono::steady_clock::now();
 
     std::chrono::duration<double> BFS_time = std::chrono::duration_cast<std::chrono::duration<double>>(end2 - start2);
-    std::cout << "BFS took " << BFS_time.count() << " seconds!" << std::endl;
+    std::cout << "BFS took " << 1000 * 1000 * BFS_time.count() << " microseconds!" << std::endl;
 }
