@@ -1,5 +1,6 @@
 #include "Graph.h"
 #include <chrono>
+#include <queue>
 
 
 void Maze::generate() {
@@ -144,7 +145,52 @@ void Maze::print() const {
     std::cout << "(Indexing for Row & Col starts at 0)" << std::endl;
 }
 
+void printResult(int up, int down, int left, int right) {
+    std::cout << std::endl << "Depth-First Search Direction Results: " << std::endl;
+    std::cout << "Up Count: " << up << std::endl;
+    std::cout << "Down Count: " << down << std::endl;
+    std::cout << "Left Count: " << left << std::endl;
+    std::cout << "Right Count: " << right << std::endl;
+    std::cout << "Total Count: " << up + down + left + right << std::endl;
+}
+
 bool Maze::BFS(Position startPo, Position endPo, int up, int down, int left, int right) {
+    std::queue<Position> visiting;
+    visiting.push(startPo);
+    grid[startPo.row][startPo.col].visited = true;
+    while (!visiting.empty()) {
+        Position currPos = visiting.front();
+        visiting.pop();
+        Cell visitingCell = grid[currPos.row][currPos.col];
+        if (visitingCell.up && !grid[currPos.row-1][currPos.col].visited) {
+                Position nextPos = Position(currPos.row-1, currPos.col);
+                grid[nextPos.row][nextPos.col].visited = true;
+                visiting.push(nextPos);
+                up += 1;
+                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+        }
+        if (visitingCell.down && !grid[currPos.row+1][currPos.col].visited) {
+                Position nextPos = Position(currPos.row+1, currPos.col);
+                grid[nextPos.row][nextPos.col].visited = true;
+                visiting.push(nextPos);
+                down += 1;
+                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+        }
+        if (visitingCell.left && !grid[currPos.row][currPos.col-1].visited) {
+                Position nextPos = Position(currPos.row, currPos.col-1);
+                grid[nextPos.row][nextPos.col].visited = true;
+                visiting.push(nextPos);
+                left += 1;
+                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+        }
+        if (visitingCell.right && !grid[currPos.row][currPos.col+1].visited) {
+                Position nextPos = Position(currPos.row, currPos.col+1);
+                grid[nextPos.row][nextPos.col].visited = true;
+                visiting.push(nextPos);
+                right += 1;
+                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+        }
+    }
     return false;
 }
 
