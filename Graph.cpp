@@ -161,48 +161,68 @@ bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int
 
     grid[startPo.row][startPo.col].visited = true;
 
-    if (grid[startPo.row][startPo.col].up && !grid[startPo.row + 1][startPo.col].visited) {
-        startPo.row = startPo.row + 1;
-        up++;
-        bool stop = DFS(startPo, endPo, up, down, left, right);
-
-        if (stop) {
-            return true;
+    if (grid[startPo.row][startPo.col].up) {
+        if (!grid[startPo.row - 1][startPo.col].visited) {
+            startPo.row -= 1;
+            up++;
+            bool stop = DFS(startPo, endPo, up, down, left, right);
+            startPo.row += 1;
+            if (stop) {
+                return true;
+            }
         }
     }
 
-    if (grid[startPo.row][startPo.col].down && !grid[startPo.row - 1][startPo.col].visited) {
-        startPo.row = startPo.row - 1;
-        down++;
-        bool stop = DFS(startPo, endPo, up, down, left, right);
-
-        if (stop) {
-            return true;
+    if (grid[startPo.row][startPo.col].down) {
+        if (!grid[startPo.row + 1][startPo.col].visited) {
+            startPo.row += 1;
+            down++;
+            bool stop = DFS(startPo, endPo, up, down, left, right);
+            startPo.row -= 1;
+            if (stop) {
+                return true;
+            }
         }
+
     }
 
-    if (grid[startPo.row][startPo.col].left && !grid[startPo.row][startPo.col - 1].visited) {
-        startPo.col = startPo.col - 1;
-        left++;
-        bool stop = DFS(startPo, endPo, up, down, left, right);
-
-        if (stop) {
-            return true;
+    if (grid[startPo.row][startPo.col].left) {
+        if (!grid[startPo.row][startPo.col - 1].visited) {
+            startPo.col -= 1;
+            left++;
+            bool stop = DFS(startPo, endPo, up, down, left, right);
+            startPo.col += 1;
+            if (stop) {
+                return true;
+            }
         }
+
     }
 
-    if (grid[startPo.row][startPo.col].right && !grid[startPo.row][startPo.col + 1].visited) {
-        startPo.col = startPo.col + 1;
-        right++;
-        bool stop = DFS(startPo, endPo, up, down, left, right);
-
-        if (stop) {
-            return true;
+    if (grid[startPo.row][startPo.col].right) {
+        if (!grid[startPo.row][startPo.col + 1].visited) {
+            startPo.col += 1;
+            right++;
+            bool stop = DFS(startPo, endPo, up, down, left, right);
+            startPo.col -= 1;
+            if (stop) {
+                return true;
+            }
         }
+
     }
+
+    return false;
 }
 
 
 void Maze::runAlgorithms() {
+
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            grid[r][c].visited = false;
+        }
+    }
+
     DFS(startPos, endPos);
 }
