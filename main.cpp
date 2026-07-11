@@ -3,7 +3,7 @@
 
 int main() {
 
-    Maze maze(100,100);
+    Maze maze(317,317);
     // 317*317 = 100489 nodes
     maze.generate();
     std::cout << "Start position: " << maze.startPos.row << ", " << maze.startPos.col << std::endl;
