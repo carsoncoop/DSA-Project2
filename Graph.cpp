@@ -2,6 +2,7 @@
 #include <chrono>
 #include <queue>
 #include <stack>
+#include <map>
 
 
 void Maze::generate() {
@@ -147,7 +148,7 @@ void Maze::print() const {
 }
 
 void printResult(int up, int down, int left, int right) {
-    std::cout << std::endl << "Depth-First Search Direction Results: " << std::endl;
+    std::cout << std::endl << "Breadth-First Search Direction Results: " << std::endl;
     std::cout << "Up Count: " << up << std::endl;
     std::cout << "Down Count: " << down << std::endl;
     std::cout << "Left Count: " << left << std::endl;
@@ -155,7 +156,31 @@ void printResult(int up, int down, int left, int right) {
     std::cout << "Total Count: " << up + down + left + right << std::endl;
 }
 
+std::vector<int> calculatePath(Position startPos, Position endPos, std::vector<std::vector<int>> pathing) {
+    int up = 0;
+    int down = 0;
+    int left = 0;
+    int right = 0;
+    Position currPos = Position(endPos.row, endPos.col);
+    while (currPos.row != startPos.row && currPos.col != startPos.col) {
+        Position nextPos = Position(currPos.row, currPos.col);
+        int direction = pathing[currPos.row][currPos.col];
+        if (direction == 1) {nextPos.row += 1; up += 1;}
+        if (direction == 2) {nextPos.row -= 1; down += 1;}
+        if (direction == 3) {nextPos.col += 1; left += 1;}
+        if (direction == 4) {nextPos.col -= 1; right += 1;}
+        currPos = nextPos;
+    }
+    std::vector<int> totals;
+    totals.push_back(up);
+    totals.push_back(down);
+    totals.push_back(left);
+    totals.push_back(right);
+    return totals;
+}
+
 bool Maze::BFS(Position startPo, Position endPo, int up, int down, int left, int right) {
+    std::vector<std::vector<int>> pathing(grid.size(), std::vector<int>(grid[0].size(), 0));
     std::queue<Position> visiting;
     visiting.push(startPo);
     grid[startPo.row][startPo.col].visited = true;
@@ -164,36 +189,56 @@ bool Maze::BFS(Position startPo, Position endPo, int up, int down, int left, int
         visiting.pop();
         Cell visitingCell = grid[currPos.row][currPos.col];
         if (visitingCell.up && !grid[currPos.row-1][currPos.col].visited) {
-                Position nextPos = Position(currPos.row-1, currPos.col);
-                grid[nextPos.row][nextPos.col].visited = true;
-                visiting.push(nextPos);
-                up += 1;
-                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+            Position nextPos = Position(currPos.row-1, currPos.col);
+            grid[nextPos.row][nextPos.col].visited = true;
+            visiting.push(nextPos);
+            pathing[nextPos.row][nextPos.col] = 1;
+            up += 1;
+            if (nextPos.row == endPos.row && nextPos.col == endPos.col) {
+                std::vector<int> thePath = calculatePath(startPos, endPos, pathing);
+                printResult(thePath[0], thePath[1], thePath[2], thePath[3]);
+                return true;
+            }
         }
         if (visitingCell.down && !grid[currPos.row+1][currPos.col].visited) {
-                Position nextPos = Position(currPos.row+1, currPos.col);
-                grid[nextPos.row][nextPos.col].visited = true;
-                visiting.push(nextPos);
-                down += 1;
-                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+            Position nextPos = Position(currPos.row+1, currPos.col);
+            grid[nextPos.row][nextPos.col].visited = true;
+            visiting.push(nextPos);
+            pathing[nextPos.row][nextPos.col] = 2;
+            down += 1;
+            if (nextPos.row == endPos.row && nextPos.col == endPos.col) {
+                std::vector<int> thePath = calculatePath(startPos, endPos, pathing);
+                printResult(thePath[0], thePath[1], thePath[2], thePath[3]);
+                return true;
+            }
         }
         if (visitingCell.left && !grid[currPos.row][currPos.col-1].visited) {
-                Position nextPos = Position(currPos.row, currPos.col-1);
-                grid[nextPos.row][nextPos.col].visited = true;
-                visiting.push(nextPos);
-                left += 1;
-                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+            Position nextPos = Position(currPos.row, currPos.col-1);
+            grid[nextPos.row][nextPos.col].visited = true;
+            visiting.push(nextPos);
+            pathing[nextPos.row][nextPos.col] = 3;
+            left += 1;
+            if (nextPos.row == endPos.row && nextPos.col == endPos.col) {
+                std::vector<int> thePath = calculatePath(startPos, endPos, pathing);
+                printResult(thePath[0], thePath[1], thePath[2], thePath[3]);
+            }
         }
         if (visitingCell.right && !grid[currPos.row][currPos.col+1].visited) {
                 Position nextPos = Position(currPos.row, currPos.col+1);
                 grid[nextPos.row][nextPos.col].visited = true;
                 visiting.push(nextPos);
+                pathing[nextPos.row][nextPos.col] = 4;
                 right += 1;
-                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+            if (nextPos.row == endPos.row && nextPos.col == endPos.col) {
+                std::vector<int> thePath = calculatePath(startPos, endPos, pathing);
+                printResult(thePath[0], thePath[1], thePath[2], thePath[3]);
+                printResult(up,down,left,right); return true;
+            }
         }
     }
     return false;
 }
+
 /* STACK BASED DFS, REQUIRED FOR PAST 100k BUT RECURSIVE WORKS UP TO 100k FINE
 bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int right)  {
     std::stack<Position> visiting;
