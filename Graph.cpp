@@ -1,6 +1,7 @@
 #include "Graph.h"
 #include <chrono>
 #include <queue>
+#include <stack>
 
 
 void Maze::generate() {
@@ -193,6 +194,47 @@ bool Maze::BFS(Position startPo, Position endPo, int up, int down, int left, int
     }
     return false;
 }
+/* STACK BASED DFS, REQUIRED FOR PAST 100k BUT RECURSIVE WORKS UP TO 100k FINE
+bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int right)  {
+    std::stack<Position> visiting;
+    visiting.push(startPo);
+    grid[startPo.row][startPo.col].visited = true;
+    while (!visiting.empty()) {
+        Position currPos = visiting.top();
+        visiting.pop();
+        Cell visitingCell = grid[currPos.row][currPos.col];
+        if (visitingCell.up && !grid[currPos.row-1][currPos.col].visited) {
+                Position nextPos = Position(currPos.row-1, currPos.col);
+                grid[nextPos.row][nextPos.col].visited = true;
+                visiting.push(nextPos);
+                up += 1;
+                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+        }
+        if (visitingCell.down && !grid[currPos.row+1][currPos.col].visited) {
+                Position nextPos = Position(currPos.row+1, currPos.col);
+                grid[nextPos.row][nextPos.col].visited = true;
+                visiting.push(nextPos);
+                down += 1;
+                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+        }
+        if (visitingCell.left && !grid[currPos.row][currPos.col-1].visited) {
+                Position nextPos = Position(currPos.row, currPos.col-1);
+                grid[nextPos.row][nextPos.col].visited = true;
+                visiting.push(nextPos);
+                left += 1;
+                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+        }
+        if (visitingCell.right && !grid[currPos.row][currPos.col+1].visited) {
+                Position nextPos = Position(currPos.row, currPos.col+1);
+                grid[nextPos.row][nextPos.col].visited = true;
+                visiting.push(nextPos);
+                right += 1;
+                if (nextPos.row == endPos.row && nextPos.col == endPos.col) {printResult(up,down,left,right); return true;}
+        }
+    }
+    return false;
+}
+*/
 
 bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int right) {
     if (startPo.col == endPo.col && startPo.row == endPo.row) {
@@ -205,9 +247,7 @@ bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int
         return true;
     }
 
-
     grid[startPo.row][startPo.col].visited = true;
-
 
     if (grid[startPo.row][startPo.col].up) {
         if (!grid[startPo.row - 1][startPo.col].visited) {
@@ -220,8 +260,6 @@ bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int
             }
         }
     }
-
-
     if (grid[startPo.row][startPo.col].down) {
         if (!grid[startPo.row + 1][startPo.col].visited) {
             startPo.row += 1;
@@ -232,11 +270,7 @@ bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int
                 return true;
             }
         }
-
-
     }
-
-
     if (grid[startPo.row][startPo.col].left) {
         if (!grid[startPo.row][startPo.col - 1].visited) {
             startPo.col -= 1;
@@ -247,11 +281,7 @@ bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int
                 return true;
             }
         }
-
-
     }
-
-
     if (grid[startPo.row][startPo.col].right) {
         if (!grid[startPo.row][startPo.col + 1].visited) {
             startPo.col += 1;
@@ -270,6 +300,7 @@ bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int
 
 
 void Maze::runAlgorithms() {
+
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < cols; c++) {
             grid[r][c].visited = false;
@@ -282,6 +313,7 @@ void Maze::runAlgorithms() {
 
     std::chrono::duration<double> DFS_time = std::chrono::duration_cast<std::chrono::duration<double>>(end1 - start1);
     std::cout << "DFS took " << 1000 * 1000 * DFS_time.count() << " microseconds!" << std::endl;
+
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < cols; c++) {
             grid[r][c].visited = false;

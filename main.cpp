@@ -3,9 +3,11 @@
 
 int main() {
 
-    Maze maze(20,20);
+    Maze maze(317,317);
+    // 317*317 = 100489 nodes
     maze.generate();
-    maze.print();
+    std::cout << "maze generated" << std::endl;
+    //maze.print(); // takes too long to print for large mazes, breaks past cols=39
     maze.runAlgorithms();
     return 0;
 }
