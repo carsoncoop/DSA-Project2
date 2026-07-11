@@ -1,5 +1,5 @@
 #include "Graph.h"
-
+#include <chrono>
 
 
 void Maze::generate() {
@@ -202,7 +202,19 @@ bool Maze::DFS(Position startPo, Position endPo, int up, int down, int left, int
     }
 }
 
-
+//https://cplusplus.com/reference/chrono/steady_clock/ referenced for timing information
 void Maze::runAlgorithms() {
+    std::chrono::steady_clock::time_point start1 = std::chrono::steady_clock::now();
     DFS(startPos, endPos);
+    std::chrono::steady_clock::time_point end1 = std::chrono::steady_clock::now();
+
+    std::chrono::duration<double> DFS_time = std::chrono::duration_cast<std::chrono::duration<double>>(end1 - start1);
+    std::cout << "DFS took " << DFS_time.count() << " seconds!" << std::endl;
+
+    std::chrono::steady_clock::time_point start2 = std::chrono::steady_clock::now();
+    BFS(startPos, endPos);
+    std::chrono::steady_clock::time_point end2 = std::chrono::steady_clock::now();
+
+    std::chrono::duration<double> BFS_time = std::chrono::duration_cast<std::chrono::duration<double>>(end2 - start2);
+    std::cout << "BFS took " << BFS_time.count() << " seconds!" << std::endl;
 }
