@@ -161,14 +161,17 @@ std::vector<int> calculatePath(Position startPos, Position endPos, std::vector<s
     int down = 0;
     int left = 0;
     int right = 0;
+    int steps = 0;
     Position currPos = Position(endPos.row, endPos.col);
-    while (currPos.row != startPos.row && currPos.col != startPos.col) {
+    while (!(currPos.row == startPos.row && currPos.col == startPos.col)) {
         Position nextPos = Position(currPos.row, currPos.col);
         int direction = pathing[currPos.row][currPos.col];
         if (direction == 1) {nextPos.row += 1; up += 1;}
         if (direction == 2) {nextPos.row -= 1; down += 1;}
         if (direction == 3) {nextPos.col += 1; left += 1;}
         if (direction == 4) {nextPos.col -= 1; right += 1;}
+        steps += 1;
+        //std::cout << "Step " << steps << ": " <<  "to: " << nextPos.row << ", " << nextPos.col << " from " << currPos.row << ", " << currPos.col << std::endl;
         currPos = nextPos;
     }
     std::vector<int> totals;
@@ -224,15 +227,14 @@ bool Maze::BFS(Position startPo, Position endPo, int up, int down, int left, int
             }
         }
         if (visitingCell.right && !grid[currPos.row][currPos.col+1].visited) {
-                Position nextPos = Position(currPos.row, currPos.col+1);
-                grid[nextPos.row][nextPos.col].visited = true;
-                visiting.push(nextPos);
-                pathing[nextPos.row][nextPos.col] = 4;
-                right += 1;
+            Position nextPos = Position(currPos.row, currPos.col+1);
+            grid[nextPos.row][nextPos.col].visited = true;
+            visiting.push(nextPos);
+            pathing[nextPos.row][nextPos.col] = 4;
+            right += 1;
             if (nextPos.row == endPos.row && nextPos.col == endPos.col) {
                 std::vector<int> thePath = calculatePath(startPos, endPos, pathing);
                 printResult(thePath[0], thePath[1], thePath[2], thePath[3]);
-                printResult(up,down,left,right); return true;
             }
         }
     }
